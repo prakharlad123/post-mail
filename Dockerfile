@@ -11,4 +11,4 @@ WORKDIR /usr/src/app
 COPY . /usr/src
 
 # install dependencies
-RUN npm install
+RUN yarn install
