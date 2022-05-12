@@ -23,3 +23,8 @@
     display: flex;
     justify-content: center;
 }
+
+.text {
+    text-transform: none !important;
+    color: gray !important;
+}

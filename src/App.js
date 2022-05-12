@@ -9,9 +9,10 @@ import SendMail from './SendMail';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSendMessageIsOpen } from './features/mailSlice';
-import { selectUser } from './features/userSlice';
+import { logout, selectUser } from './features/userSlice';
 import Login from './Login';
 import { auth } from './firebase';
+import { useScrollTrigger } from '@material-ui/core';
 
 function App() {
   const sendMessageIsOpen = useSelector(selectSendMessageIsOpen);
@@ -19,17 +20,37 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        // the user is logged in
-        dispatch(login({
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL
-        }))
-      }
-    })
-  }, [])
+    auth.onAuthStateChanged((user) => {
+    if(user){
+      dispatch(login({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        emailVerified: user.emailVerified
+      }  
+      ))
+      console.log(user)
+    } else {
+      dispatch(logout())
+    }
+  })
+  }, [dispatch])
+
+  // useEffect(() => {
+  //   auth.onAuthStateChanged(user => {
+  //     if (user) {
+  //       // the user is logged in
+  //       dispatch(login({
+  //         uid: user.uid,
+  //         displayName: user.displayName,  
+  //         email: user.email,
+  //         photoURL: user.photoURL,
+  //         emailVerified: user.emailVerified
+  //       }))
+  //     }
+  //   })
+  // }, [dispatch])
 
   return (
     <Router>

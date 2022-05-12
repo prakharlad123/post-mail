@@ -1,4 +1,4 @@
-import { Button, IconButton } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import React from 'react';
 import './Sidebar.css';
 import InboxIcon from '@material-ui/icons/Inbox';
@@ -9,14 +9,30 @@ import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import NearMeIcon from '@material-ui/icons/NearMe';
 import NoteIcon from '@material-ui/icons/Note';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import PersonIcon from '@material-ui/icons/Person';
-import DuoIcon from '@material-ui/icons/Duo';
-import PhoneIcon from '@material-ui/icons/Phone';
 import { useDispatch } from 'react-redux';
 import { openSendMessage } from './features/mailSlice';
+import { useSelector } from 'react-redux';
+import { selectUser } from './features/userSlice';
+import { auth } from './firebase';
+import VideoCallIcon from '@material-ui/icons/VideoCall';
 
 function Sidebar() {
+  const user = useSelector(selectUser);
+
+  console.log(user.email);
   const dispatch  = useDispatch();
+  
+  const shareMeet = () => {
+    if(user.emailVerified){
+        window.open('https://meet.google.com/getalink?hs=202')
+    }
+    else {
+        alert('Please sign in using google account to access this feature')
+        if(window.confirm('Would you like to continue with google account')){
+        auth.signOut()
+    }
+}
+}
 
   return (
     <div className='sidebar'>
@@ -38,15 +54,13 @@ function Sidebar() {
 
         <div className="sidebar__footer" >
           <div className='sidebar__footerIcons' >
-            <IconButton>
-              <PersonIcon />
-            </IconButton>
-            <IconButton>
-              <DuoIcon />
-            </IconButton>
-            <IconButton>
-              <PhoneIcon />
-            </IconButton>
+          <Button 
+          className='text' 
+          startIcon={<VideoCallIcon />}
+          onClick={shareMeet}
+        >
+          Video Chat
+        </Button>
           </div>
         </div>
     </div>
