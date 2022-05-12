@@ -9,5 +9,7 @@ TO DEPLOY ON FIREBASE:
 firebase login
 firebase init
     Select Hosting option
+    public directory: build
+    single-page app : y
 npm run build
 firebase deploy
